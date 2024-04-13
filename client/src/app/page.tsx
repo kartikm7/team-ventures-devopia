@@ -83,12 +83,13 @@ export default function Home() {
   return (
     <main className="w-full">
       <div className="flex items-center justify-between w-full h-screen bg-green-dark ">
-        <div className="flex flex-col mx-auto text-5xl text-left md:block">
-          <p className="text-white">
-            <span className="font-semibold">Studying online</span> is now,{" "}
+        <div className="flex flex-col max-w-xl gap-10 mx-auto text-left">
+          <p className="text-5xl text-white">
+            <span className="font-bold text-blue-heading">Studying online</span> is now,{" "}
             <br /> much better!
           </p>
-          <Button className="mt-5" variant={"secondary"}>
+          <p className="text-lg text-white">TOTC is an interesting platform that will teach you in more an interactive way</p>
+          <Button className="w-40" variant={"secondary"}>
             Get Started!
           </Button>
         </div>
@@ -129,8 +130,8 @@ export default function Home() {
           />
         </div>
       </div>
-      <div className="flex flex-col w-full gap-5 m-10 text-center">
-        <h1 className="text-3xl font-bold"><span className="text-blue-heading">Our</span>{"    "}<span className="text-green-dark">Features</span></h1>
+      <div className="flex flex-col w-full gap-5 my-10 text-center">
+        <h1 className="text-3xl font-bold"><span className="text-blue-heading">Our</span>{" "}<span className="text-green-dark">Features</span></h1>
         <p className="text-md text-grey">This very extraordinary feature, can make learning activities more efficient</p>
       </div>
       <div className="flex flex-col items-center justify-center w-full gap-10">
