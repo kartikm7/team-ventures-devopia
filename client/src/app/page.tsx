@@ -1,5 +1,4 @@
 "use client";
-
 import Image from "next/image";
 import { SignUp } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
