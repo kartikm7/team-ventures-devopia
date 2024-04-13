@@ -16,68 +16,107 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Bell } from "lucide-react";
+import { Bell, Car } from "lucide-react";
+
+type CarouselItemProps = {
+  title: string;
+  name: string;
+  desc: string;
+  button_text: string;
+  profile_pic: string;
+}
+
+const CarouselItem1 = ({ title, desc, button_text, profile_pic, name }: CarouselItemProps) => {
+  return (
+    <CarouselItem c>
+      <Card className="">
+        <CardHeader>
+          <CardTitle>
+            <div className="flex items-center gap-2">
+              <div className="">
+                <Avatar>
+                  <AvatarImage src={profile_pic} />
+                  <AvatarFallback>M</AvatarFallback>
+                </Avatar>
+              </div>
+              <h1>{name}</h1>
+            </div></CardTitle>
+          <CardDescription>{desc}</CardDescription>
+        </CardHeader>
+        <CardFooter>
+          <Button className="bg-green-dark">
+            <div className="flex items-center justify-center gap-2">
+              <Bell className="" size={20} /> Notify
+            </div>
+          </Button>
+        </CardFooter>
+      </Card>
+    </CarouselItem>
+  );
+
+
+}
 
 export default function FreeTeachers() {
   return (
-      <Carousel className="w-full">
-        <CarouselContent>
-          <CarouselItem className="basis-1/2">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-xl">
-                  <div className="flex items-center gap-2">
-                    <div className="">
-                      <Avatar>
-                        <AvatarImage src="" />
-                        <AvatarFallback>M</AvatarFallback>
-                      </Avatar>
-                    </div>
+    <Carousel className="w-full">
+      <CarouselContent>
+        <CarouselItem className="basis-1/2">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-xl">
+                <div className="flex items-center gap-2">
+                  <div className="">
+                    <Avatar>
+                      <AvatarImage src="" />
+                      <AvatarFallback>M</AvatarFallback>
+                    </Avatar>
+                  </div>
 
-                    <h1>Manish Potey</h1>
+                  <h1>Manish Potey</h1>
+                </div>
+              </CardTitle>
+              <CardDescription>Mathematics Faculty</CardDescription>
+            </CardHeader>
+            <CardFooter>
+              <Button>
+                <div className="flex items-center justify-center gap-2">
+                  <Bell size={20} /> Notify
+                </div>
+              </Button>
+            </CardFooter>
+          </Card>
+        </CarouselItem>
+        <CarouselItem className="basis-1/2">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-xl">
+                <div className="flex items-center gap-2">
+                  <div className="">
+                    <Avatar>
+                      <AvatarImage src="" />
+                      <AvatarFallback>M</AvatarFallback>
+                    </Avatar>
                   </div>
-                </CardTitle>
-                <CardDescription>Mathematics Faculty</CardDescription>
-              </CardHeader>
-              <CardFooter>
-                <Button>
-                  <div className="flex justify-center items-center gap-2">
-                    <Bell size={20} /> Notify
-                  </div>
-                </Button>
-              </CardFooter>
-            </Card>
-          </CarouselItem>
-          <CarouselItem className="basis-1/2">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-xl">
-                  <div className="flex items-center gap-2">
-                    <div className="">
-                      <Avatar>
-                        <AvatarImage src="" />
-                        <AvatarFallback>M</AvatarFallback>
-                      </Avatar>
-                    </div>
 
-                    <h1>Manish Potey</h1>
-                  </div>
-                </CardTitle>
-                <CardDescription>Mathematics Faculty</CardDescription>
-              </CardHeader>
-              <CardFooter>
-                <Button>
-                  <div className="flex justify-center items-center gap-2">
-                    <Bell size={20} /> Notify
-                  </div>
-                </Button>
-              </CardFooter>
-            </Card>
-          </CarouselItem>
-          
-        </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
-      </Carousel>
+                  <h1>Manish Potey</h1>
+                </div>
+              </CardTitle>
+              <CardDescription>Mathematics Faculty</CardDescription>
+            </CardHeader>
+            <CardFooter>
+              <Button>
+                <div className="flex items-center justify-center gap-2">
+                  <Bell size={20} /> Notify
+                </div>
+              </Button>
+            </CardFooter>
+          </Card>
+        </CarouselItem>
+
+      </CarouselContent>
+      <CarouselPrevious />
+      <CarouselNext />
+    </Carousel>
   )
 }

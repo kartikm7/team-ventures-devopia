@@ -16,8 +16,8 @@ export default function Dashboard() {
   const marks = [80, 70, 85, 75];
 
   return (
-    <div className="flex flex-col gap-10 w-full h-screen ">
-      <div className="grid grid-cols-2 max-h-1/2 justify-center items-center">
+    <div className="flex flex-col w-full h-screen gap-10 ">
+      <div className="grid items-center justify-center grid-cols-2 max-h-1/2">
         <div className="self-center mx-auto ">
           <Welcome />
         </div>
@@ -36,8 +36,8 @@ export default function Dashboard() {
           </Card>
         </div>
       </div>
-      <div className="grid grid-cols-2 max-h-1/2 justify-center items-center">
-        <div className="flex flex-col mx-auto gap-3">
+      <div className="grid items-center justify-center grid-cols-2 max-h-1/2">
+        <div className="flex flex-col gap-3 mx-auto">
           <h1 className="text-3xl font-semibold">Courses for you</h1>
           <CourseCarousel />
         </div>
