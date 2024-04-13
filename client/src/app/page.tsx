@@ -13,11 +13,43 @@ import {
 import { Separator } from "@/components/ui/separator";
 import Tilt from "react-parallax-tilt";
 
+type CardProps = {
+  className: string;
+  title: string;
+  description: string;
+}
+
+const CardComponent = (props: CardProps) => {
+  return (
+    <Card className={props.className}>
+      <CardHeader>
+        <CardTitle className="text-xl">{props.title}</CardTitle>
+        <CardDescription>{props.description}</CardDescription>
+        <Separator />
+        <Tilt>
+          <CardContent className="m-0 text-sm">
+            <p>
+              Performance Prediction leverages historical reports and pertinent
+              metrics to anticipate future outcomes.
+            </p>
+            <p>
+              By analyzing past performance trends and key indicators, our
+              system generates insightful forecasts to aid in decision-making.
+            </p>
+          </CardContent>
+        </Tilt>
+      </CardHeader>
+    </Card>
+  );
+}
+
+
+
 export default function Home() {
   const name = "Learn Space";
   return (
     <main className="w-full">
-      <div className="flex items-center justify-between w-full h-screen bg-gradient-to-b from-green-dark to-white ">
+      <div className="flex items-center justify-between w-full h-screen bg-green-dark ">
         <div className="flex flex-col mx-auto text-5xl text-left md:block">
           <p className="text-white">
             <span className="font-semibold">Studying online</span> is now,{" "}
@@ -44,75 +76,24 @@ export default function Home() {
           </h1>
         </div>
         <div className="flex items-center justify-center w-full gap-20">
-          <Card className="w-1/4 h-72 border-green-heading">
-            <CardHeader>
-              <CardTitle className="text-xl">Performance Prediction</CardTitle>
-              <CardDescription>
-                Based on previous reports and other relevant metrics
-              </CardDescription>
-              <Separator />
-              <Tilt>
-                <CardContent className="m-0 text-sm">
-                  <p>
-                    Performance Prediction leverages historical reports and
-                    pertinent metrics to anticipate future outcomes.
-                  </p>
-                  <p>
-                    By analyzing past performance trends and key indicators, our
-                    system generates insightful forecasts to aid in
-                    decision-making.
-                  </p>
-                </CardContent>
-              </Tilt>
-            </CardHeader>
-          </Card>
-          <Card className="w-1/4 h-72 border-green-heading">
-            <CardHeader>
-              <CardTitle className="text-xl">Interactive Learning</CardTitle>
-              <CardDescription>
-                Engaging content for both students and teachers
-              </CardDescription>
-              <Separator />
-              <Tilt>
-                <CardContent className="m-0 text-sm">
-                  <p>
-                    Our platform offers interactive learning experiences
-                    tailored for students and teachers alike.
-                  </p>
-                  <p>
-                    Designed with dyslexia-friendly features, such as clear
-                    fonts and color contrast, our platform ensures accessibility
-                    for all users.
-                  </p>
-                </CardContent>
-              </Tilt>
-            </CardHeader>
-          </Card>
-          <Card className="w-1/4 h-72 border-green-heading">
-            <CardHeader>
-              <CardTitle className="text-xl">Assessment and Feedback</CardTitle>
-              <CardDescription>
-                Streamlined evaluation processes for enhanced learning outcomes
-              </CardDescription>
-              <Separator />
-              <Tilt>
-                <CardContent className="m-0 text-sm">
-                  <p>
-                    Our platform simplifies assessment and feedback mechanisms,
-                    empowering teachers to provide timely and constructive
-                    feedback to students.
-                  </p>
-                  <p>
-                    {name} also provides, customizable assessment tools to
-                    automate the redundant processes.
-                  </p>
-                </CardContent>
-              </Tilt>
-            </CardHeader>
-          </Card>
+          <CardComponent
+            className="w-1/4"
+            title="Performance Prediction"
+            description="Predictive Analytics"
+          />
+          <CardComponent
+            className="w-1/4"
+            title="Performance Prediction"
+            description="Predictive Analytics"
+          />
+          <CardComponent
+            className="w-1/4"
+            title="Performance Prediction"
+            description="Predictive Analytics"
+          />
         </div>
       </div>
-      <div className="flex items-center justify-between w-full h-screen gap-20 ">
+      <div className="flex items-center justify-between w-full gap-20 ">
         <div className="flex items-center justify-center w-1/2 mx-auto ">
           <Image
             src={"/images/assessment.png"}
@@ -133,7 +114,7 @@ export default function Home() {
           </p>
         </div>
       </div>
-      <div className="grid items-center justify-center w-full h-screen grid-cols-2 ">
+      <div className="grid items-center justify-center w-full grid-cols-2 ">
         <div className="w-1/2 mx-auto">
           <h1 className="text-2xl font-semibold">
             One-on-One,
