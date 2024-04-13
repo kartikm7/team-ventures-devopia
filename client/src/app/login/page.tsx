@@ -5,6 +5,15 @@ import React, { useEffect } from 'react'
 import { useUser } from '@clerk/nextjs'
 
 const Login = () => {
+    const user = useUser()
+    const router = useRouter()
+    
+    useEffect(() => {
+        if (user.user) {
+            router.push('/type')
+        }
+    }, []);
+    
     return (
         <div className='flex justify-center w-full h-screen my-10'>
             <SignIn
