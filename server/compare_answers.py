@@ -10,14 +10,14 @@ from langchain.vectorstores import Chroma
 from langchain.chains import RetrievalQA
 import google.generativeai as genai
 from sentence_transformers import SentenceTransformer, util
-
 from PIL import Image
 
 warnings.filterwarnings("ignore")
 
 # load_dotenv('.env')
 # API_KEY = os.getenv("API_KEY")
-API_KEY = "AIzaSyBfMvikYUef6xxUi2wqOY6V88qbo0_8RP0"
+# API_KEY = "AIzaSyBfMvikYUef6xxUi2wqOY6V88qbo0_8RP0"
+API_KEY = "AIzaSyA7luCVarpUfgQz5G4vAKR3KUY8losODRs"
 genai.configure(api_key=API_KEY)
 
 def load_and_split_pdfs(pdf_directory):
@@ -48,7 +48,7 @@ def pdf2vec(pdf_directory,embeddings_model):
 
 def create_qa_chain_model(gemini_pro_model, vector_index, question):
     template = """
-    Use the following pieces of context to answer the questions asked by the user. If you don't know the answer, just say that you don't know, don't try to make up an answer. Keep the answer as concise as possible. 
+    Use the following pieces of context to answer the questions asked by the user. 
     Context : {context}
     Question: {question}
     Helpful Answer: Provide the response in one single string.
@@ -67,14 +67,23 @@ def create_qa_chain_model(gemini_pro_model, vector_index, question):
 
 
 def get_gemini_response(image_path):
+    # prompt = """
+    # RETURN THE TEXT IN THIS IMAGE
+    # """
     prompt = """
-    RETURN THE TEXT IN THIS IMAGE
-    """
+    GIVE ME THE TWO THINGS IN THIS IMAGE:-
+    - Question
+    - Answer
+
+    STRICTLY RETURN IN THIS FORMAT {{"output":[<questions with answers>]}}
+    
+   
+"""
     image = Image.open(image_path)
 
     model = genai.GenerativeModel('gemini-pro-vision')
     response = model.generate_content([image, prompt])
-    return response.text
+    return json.loads(response.text)
 
 def compare_answers(model,student_answer, rag_answer):
     embeddings = model.encode([rag_answer, student_answer])
@@ -84,15 +93,23 @@ def compare_answers(model,student_answer, rag_answer):
     return similarity_score.item()
 
 def score_student(sbert_model,gemini_model, vector_index,question,image_path):
-    rag_answer = create_qa_chain_model(gemini_model,vector_index,question)
+    op = []
     student_answer = get_gemini_response(image_path)
-    similarity_score = compare_answers(sbert_model,student_answer, rag_answer)
-    op = {
-        "question" : question,
-        "ai_generated_answer" : rag_answer,
-        "student_answer" : student_answer,
-        "semantic_score" : similarity_score
-    }
+    print(student_answer)
+    print(type(student_answer['output']))
+    for item in student_answer['output']:
+        q = item.get("question","")
+        a = item.get("answer","")
+        print(q,a)
+        if q and a:
+            rag_answer = create_qa_chain_model(gemini_model,vector_index,q)
+            similarity_score = compare_answers(sbert_model,a, rag_answer)
+            op.append({
+                "question" : q,
+                "ai_generated_answer" : rag_answer,
+                "student_answer" : a,
+                "semantic_score" : similarity_score
+            })
     return op
 
 if __name__ == "__main__":
@@ -102,8 +119,8 @@ if __name__ == "__main__":
 
     pdf_directory = os.getcwd()+"/data"
     vector_index = pdf2vec(pdf_directory,embeddings_model)
-    question = "What are chemical equations in 250 words"
-    image_pth = "D:/CODING/DEVOPIA/team-ventures-devopia/server/student-answers/IMG_6067.png"
+    question = "What are chemical equations in 500 words"
+    image_pth = "/Users/rahuldandona/Desktop/Projects/Devopia/team-ventures-devopia/server/student-answers/newmqa.jpeg"
     x = score_student(sbert_model,gemini_model,vector_index,question,image_pth)
 
     with open("D:/CODING/DEVOPIA/team-ventures-devopia/server/outputs/op2.json", "w") as json_file:
