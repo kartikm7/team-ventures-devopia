@@ -1,0 +1,20 @@
+[
+    {
+        "question": "What are metals?",
+        "ai_generated_answer": "Metals are elements that are shiny, malleable, ductile, and good conductors of heat and electricity.",
+        "student_answer": "Metals are elements characterized by their lustre, conductivity, malleability and ductility, typically found on the left side of the periodic table.",
+        "semantic_score": 0.7417176961898804
+    },
+    {
+        "question": "What is the reactivity series?",
+        "ai_generated_answer": "The reactivity series is a list of metals arranged in the order of their decreasing activities.",
+        "student_answer": "The reactivity series is a list of metals arranged in the order of their decreasing activities.",
+        "semantic_score": 1.0
+    },
+    {
+        "question": "What is galvanization?",
+        "ai_generated_answer": "Galvanization is a method of protecting steel and iron from rusting by coating them with a thin layer of zinc.",
+        "student_answer": "Galvanization is a method of protecting steel and iron from rusting by coating with a thin layer of zinc.",
+        "semantic_score": 0.9970248937606812
+    }
+]
