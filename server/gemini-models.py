@@ -102,11 +102,11 @@ if __name__ == "__main__":
 
     pdf_directory = os.getcwd()+"/data"
     vector_index = pdf2vec(pdf_directory,embeddings_model)
-    question = "What are chemical equations in 500 words"
-    image_pth = "/Users/rahuldandona/Desktop/Projects/Devopia/team-ventures-devopia/server/student-answers/IMG_6067.png"
+    question = "What are chemical equations in 250 words"
+    image_pth = "D:/CODING/DEVOPIA/team-ventures-devopia/server/student-answers/IMG_6067.png"
     x = score_student(sbert_model,gemini_model,vector_index,question,image_pth)
 
-    with open("/Users/rahuldandona/Desktop/Projects/Devopia/team-ventures-devopia/server/outputs/op.json", "w") as json_file:
+    with open("D:/CODING/DEVOPIA/team-ventures-devopia/server/outputs/op2.json", "w") as json_file:
         json.dump(x, json_file, indent=4)
 
 
