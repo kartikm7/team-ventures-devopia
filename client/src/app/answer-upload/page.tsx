@@ -52,35 +52,33 @@ const AnswerUpload: React.FC<AnswerUploadProps> = () => {
                 <p className='text-xl font-bold'>Steps to Follow</p>
                 <ol className='text-lg list-decimal list-inside'>
                     <li>
-                        <b>Take a screenshot of your answer sheet</b>
+                        <b>Take a Photo of the Answer Sheets</b>    
+                    </li>
+                    <li>
+                        <b>Convert the screenshot to PDF</b> <br />
                         <br />
-                        <br />
-                        <ul className='text-lg list-disc list-inside'>
+                        <ul className='ml-10 list-disc'>
                             <li>
-                                <b>Identify Screenshot Method:</b> There are several ways to take a screenshot depending on your operating system and device. Here are some common options:
-                                <br />
-                                <br />
-                                <ul className='ml-10 list-disc'>
-                                    <li>
-                                        <b>PC:</b> Press Print Screen key (captures entire screen). Press Alt + Prt Sc (captures active window). Use the Snipping Tool app for a more precise selection.
-                                    </li>
-                                    <li>
-                                        <b>Phone:</b> Press the side button and volume up button together.
-                                    </li>
-                                </ul>
+                                <b>Go to ilovepdf.com:</b> Click the upload area button to open a file selection window.
+                            </li>
+                            <li>
+                                <b>Select Screenshot:</b> Click on the screenshot file to select it.
+                            </li>
+                            <li>
+                                <b>Upload Confirmation:</b> Depending on the platform, you might see a confirmation dialog or progress bar indicating the upload is in progress. Download the Converted PDF
                             </li>
                             <br />
                         </ul>
                     </li>
                     <li>
-                        <b>Upload the screenshot here</b> <br />
+                        <b>Upload the PDF here</b> <br />
                         <br />
                         <ul className='ml-10 list-disc'>
                             <li>
                                 <b>Click Upload Area:</b> Click the upload area button to open a file selection window.
                             </li>
                             <li>
-                                <b>Select Screenshot:</b> Click on the screenshot file to select it.
+                                <b>Select Screenshot:</b> Click on the PDF file to select it.
                             </li>
                             <li>
                                 <b>Upload Confirmation:</b> Depending on the platform, you might see a confirmation dialog or progress bar indicating the upload is in progress.

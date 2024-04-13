@@ -41,7 +41,7 @@ const AnswerUpload: React.FC<MarksheetUploadProps> = () => {
                             </div>
                         )
                     }
-                    <p>Upload your answer screenshots/pdfs</p>
+                    <p>Upload your Marksheet Screenshot/PDF</p>
                 </div>
                 {selectedFile && (
                     <p>Selected file: {selectedFile.name}</p>
@@ -50,47 +50,37 @@ const AnswerUpload: React.FC<MarksheetUploadProps> = () => {
             </div>
             <div className='flex flex-col gap-3'>
                 <p className='text-xl font-bold'>Steps to Follow</p>
-                <ol className='text-lg list-decimal list-inside'>
+                <ol className='flex flex-col gap-5 text-lg list-decimal list-inside'>
                     <li>
-                        <b>Take a screenshot of your answer sheet</b>
-                        <br />
-                        <br />
-                        <ul className='text-lg list-disc list-inside'>
-                            <li>
-                                <b>Identify Screenshot Method:</b> There are several ways to take a screenshot depending on your operating system and device. Here are some common options:
-                                <br />
-                                <br />
-                                <ul className='ml-10 list-disc'>
-                                    <li>
-                                        <b>PC:</b> Press Print Screen key (captures entire screen). Press Alt + Prt Sc (captures active window). Use the Snipping Tool app for a more precise selection.
-                                    </li>
-                                    <li>
-                                        <b>Phone:</b> Press the side button and volume up button together.
-                                    </li>
-                                </ul>
-                            </li>
-                            <br />
+                        <b>Upload your answer sheets</b>
+                        <ul className='ml-10 list-disc'>
+                            <li>Click on "Upload" and select your marksheets file.</li>
+                            <li>Supported formats: PDF , .JPG , .PNG</li>
                         </ul>
                     </li>
                     <li>
-                        <b>Upload the screenshot here</b> <br />
-                        <br />
+                        <b>Click on Submit</b>
                         <ul className='ml-10 list-disc'>
-                            <li>
-                                <b>Click Upload Area:</b> Click the upload area button to open a file selection window.
-                            </li>
-                            <li>
-                                <b>Select Screenshot:</b> Click on the screenshot file to select it.
-                            </li>
-                            <li>
-                                <b>Upload Confirmation:</b> Depending on the platform, you might see a confirmation dialog or progress bar indicating the upload is in progress.
-                            </li>
-                            <br />
+                            <li>Click on the "Submit" button to upload your marksheets</li>
+                            <li>Please wait while we generate predictions.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <b>Wait for the results</b>
+                        <ul className='ml-10 list-disc'>
+                            <li>Once predictions are ready, they will be displayed on the screen.</li>
+                            <li>You can download the results for future reference.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <b>Feedback</b>
+                        <ul className='ml-10 list-disc'>
+                            <li>For any issues or questions, contact support for assistance.</li>
                         </ul>
                     </li>
                 </ol>
-            </div >
-        </div >
+            </div>
+        </div>
     );
 };
 

@@ -2,16 +2,8 @@
 import React from 'react'
 import { useUser } from "@clerk/nextjs"
 import { Button } from "@/components/ui/button"
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from "react"
 import {
     Select,
@@ -89,6 +81,8 @@ const SelectItem1 = (props: SelectItemProps) => {
 export function ProfileForm() {
 
     const [selected, setSelected] = useState<string>("");
+    const user = useUser()
+    const router = useRouter()
 
     const [form, setForm] = useState<FormValues>({
         fullName: "",
@@ -97,8 +91,6 @@ export function ProfileForm() {
         age: "",
         phone: ""
     })
-
-    const user = useUser()
 
     useEffect(() => {
         console.log(user)
@@ -115,7 +107,8 @@ export function ProfileForm() {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        console.log(form)
+        console.log(form);
+        router.push('/marksheet-upload');
     }
 
     return (
