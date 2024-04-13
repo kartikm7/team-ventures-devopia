@@ -1,5 +1,4 @@
 import warnings
-from dotenv import load_dotenv
 
 import os
 
@@ -15,8 +14,7 @@ from langchain.chains import RetrievalQA
 
 warnings.filterwarnings("ignore")
 
-load_dotenv('.env')
-API_KEY = os.getenv("API_KEY")
+API_KEY = "AIzaSyBfMvikYUef6xxUi2wqOY6V88qbo0_8RP0"
 
 
 def load_and_split_pdfs(pdf_directory):
