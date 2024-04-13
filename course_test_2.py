@@ -28,10 +28,10 @@ def recommend_playlists():
             # search for YouTube videos and playlists related to the subject
             
             # Define the YouTube search query
-            search_query = f"Class {grade} {subject} ICSE"
+            search_query = f"courses + for + class + {grade} + {subject}"
             
             # Call the YouTube Data API to search for videos and playlists
-            youtube_api_url = f"https://www.googleapis.com/youtube/v3/search?part=snippet&q={search_query}&type=video,playlist&maxResults=5&key={YOUTUBE_API_KEY}"
+            youtube_api_url = f"https://www.googleapis.com/youtube/v3/search?q={search_query}&type=video,playlist&maxResults=5&key={YOUTUBE_API_KEY}"
             response = requests.get(youtube_api_url)
             data = response.json()
             
