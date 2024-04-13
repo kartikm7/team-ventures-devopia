@@ -45,7 +45,7 @@ def pdf2vec(pdf_directory,embeddings_model):
 
 def create_qa_chain_model(gemini_pro_model, vector_index, question):
     template = """
-    Use the following pieces of context to make a question paper containing 20 questions along with the answer. If you don't know the answer, just say that you don't know, don't try to make up an answer. Keep the answer as concise as possible. Always say "thanks for asking!" at the end of the answer.
+    Use the following pieces of context to make a question paper containing 20 questions along with the answer. If you don't know the answer, just say that you don't know, don't try to make up an answer. Keep the answer as concise as possible.
     {context}
     Helpful Answer: i want the response in one single string {{"questions":[<Questions with answers>]}}
     """
