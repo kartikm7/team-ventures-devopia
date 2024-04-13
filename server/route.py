@@ -1,3 +1,4 @@
+import requests
 from flask import Flask, request, jsonify
 import os
 import json
@@ -17,8 +18,60 @@ from PIL import Image
 warnings.filterwarnings("ignore")
 
 API_KEY = "AIzaSyBfMvikYUef6xxUi2wqOY6V88qbo0_8RP0"
+genai.configure(api_key=API_KEY)
 
 app = Flask(__name__)
+
+def get_gemini_response_marksheet(image_url):
+    prompt = """
+    GIVE ME THE SUBJECT, TOTAL MARKS AND OBTAINED MARKS IN THE JSON FORMAT
+    [{"subjects" : <<subjec_name>>,
+      "total_marks": <<total marks>>,
+      "obtained_marks": <<obtained marks>>}]
+    """
+    response = requests.get(image_url)
+    if response.status_code == 200:
+        image = Image.open(io.BytesIO(response.content))
+
+    model = genai.GenerativeModel('gemini-pro-vision')
+    response = model.generate_content([image, prompt])
+    x = json.loads(response.text)
+    filtered_subjects = [subject for subject in x if isinstance(subject['obtained_marks'], (int, float))]
+    sorted_subjects = sorted(filtered_subjects, key=lambda x: x['obtained_marks'], reverse=True)
+
+    return sorted_subjects
+
+
+def download_pdf_and_convert_to_pillow_images(pdf_link):
+    response = requests.get(pdf_link)
+    
+    if response.status_code == 200:
+        with open('temp_pdf.pdf', 'wb') as f:
+            f.write(response.content)
+        
+        pdf_document = fitz.open('temp_pdf.pdf')
+        
+        pillow_images = []
+        
+        for page_number in range(len(pdf_document)):
+            page = pdf_document.load_page(page_number)
+            image_list = page.get_images(full=True)
+            
+            for img_index, img_info in enumerate(image_list):
+                xref = img_info[0]
+
+                base_image = pdf_document.extract_image(xref)
+                image_bytes = base_image["image"]
+                
+                pillow_image = Image.open(io.BytesIO(image_bytes))
+                pillow_images.append(pillow_image)
+
+        pdf_document.close()
+
+        return pillow_images
+    else:
+        print("Failed to download PDF. Status code:", response.status_code)
+        return None
 
 def extract_images_from_pdf(pdf_path):
     extracted_images = []
@@ -106,24 +159,29 @@ def compare_answers(model, student_answer, rag_answer):
     similarity_score = util.cos_sim(embeddings[0], embeddings[1])
     return similarity_score.item()
 
-def score_student(sbert_model, gemini_model, vector_index, pdf_path):
+def score_student(sbert_model, gemini_model, vector_index, images):
     op = []
-    images = extract_images_from_pdf(pdf_path)
+    # images = extract_images_from_pdf(pdf_path)
     for image_path in images:
-        student_answer = get_gemini_response(image_path)
-        
-        for item in student_answer['output']:
-            q = item.get("question","")
-            a = item.get("answer","")
-            if q and a:
-                rag_answer = create_qa_chain_model(gemini_model, vector_index, q)
-                similarity_score = compare_answers(sbert_model, a, rag_answer)
-                op.append({
-                    "question" : q,
-                    "ai_generated_answer" : rag_answer,
-                    "student_answer" : a,
-                    "semantic_score" : similarity_score
-                })
+        print(op)
+        try:
+        # image_path = Image.open(image_path)
+            student_answer = get_gemini_response(image_path)
+            
+            for item in student_answer['output']:
+                q = item.get("question","")
+                a = item.get("answer","")
+                if q and a:
+                    rag_answer = create_qa_chain_model(gemini_model, vector_index, q)
+                    similarity_score = compare_answers(sbert_model, a, rag_answer)
+                    op.append({
+                        "question" : q,
+                        "ai_generated_answer" : rag_answer,
+                        "student_answer" : a,
+                        "semantic_score" : similarity_score
+                    })
+        except Exception as e:
+            print(e)
     return op
 
 @app.route("/score_student", methods=["POST"])
@@ -138,13 +196,74 @@ def score_student_api():
     vector_index = pdf2vec(pdf_directory, embeddings_model)
     
     image_path = data.get("image_path", "")
+    pillow_images = download_pdf_and_convert_to_pillow_images(image_path)
+    print(pillow_images)
+    if not pillow_images:
+        return jsonify({"error": "Failed to process PDF."}), 400
     
-    if not image_path:
-        return jsonify({"error": "Please provide both question and image_path."}), 400
-    
-    result = score_student(sbert_model, gemini_model, vector_index, image_path)
+    result = score_student(sbert_model, gemini_model, vector_index, pillow_images)
     
     return jsonify(result), 200
+
+@app.route('/recommendations', methods=['POST'])
+def recommend_playlists():
+    # Parse the student data from the request
+    student_data = request.json
+    
+    # Get student performance data (e.g., grades in subjects)
+    student_performance = student_data.get('performance')
+    grade = student_data.get('class')    
+    # Define a unanimous threshold for low performance in all subjects
+    threshold = 40  # Set the same threshold for all subjects
+    
+    # Initialize a list to store recommended content
+    recommended_content = []
+    
+    # YouTube API key
+    YOUTUBE_API_KEY = 'AIzaSyCCZPVVL666YZHtjho1qy_izAqx-VsA8C4'
+    
+    # Iterate through the student's performance in each subject
+    for subject, score in student_performance.items():
+        # Check if the student's score is below the threshold
+        if score is not None and score < threshold:
+            # If the student's score is below the threshold in this subject,
+            # search for YouTube videos and playlists related to the subject
+            
+            # Define the YouTube search query
+            search_query = f"courses + for + class + {grade} + {subject}"
+            
+            # Call the YouTube Data API to search for videos and playlists
+            youtube_api_url = f"https://www.googleapis.com/youtube/v3/search?q={search_query}&type=video,playlist&maxResults=5&key={YOUTUBE_API_KEY}"
+            response = requests.get(youtube_api_url)
+            data = response.json()
+            
+            # Extract video and playlist information from the response
+            for item in data.get('items', []):
+                # Extract either course_id (videoId) or playlist_id (playlistId)
+                content_id = None
+                if item['id']['kind'] == 'youtube#video':
+                    content_id = item['id']['videoId']
+                elif item['id']['kind'] == 'youtube#playlist':
+                    content_id = item['id']['playlistId']
+                
+                # Add the content ID to the list of recommended content
+                if content_id:
+                    recommended_content.append(content_id)
+    
+    # Return the recommended content (course_id and playlist_id) as a JSON response
+    return jsonify({'recommended_content': recommended_content[:5]})
+
+@app.route("/marksheet", methods=["POST"])
+def get_marksheet_details():
+    data = request.json
+    
+    image_url = data.get("image_url", "")
+    if not image_url:
+        return jsonify({"error": "Please provide both question and image_path."}), 400
+    
+    result = get_gemini_response_marksheet(image_url)
+    return jsonify(result), 200
+
 
 if __name__ == "__main__":
     app.run(debug=True)
