@@ -16,9 +16,9 @@ import Tilt from "react-parallax-tilt";
 export default function Home() {
   const name = "Learn Space";
   return (
-    <main className="w-full h-screen ">
-      <div className="bg-gradient-to-b from-green-dark to-white w-full h-screen flex justify-between items-center ">
-        <div className="flex flex-col md:block text-left mx-auto text-5xl">
+    <main className="w-full">
+      <div className="flex items-center justify-between w-full h-screen bg-gradient-to-b from-green-dark to-white ">
+        <div className="flex flex-col mx-auto text-5xl text-left md:block">
           <p className="text-white">
             <span className="font-semibold">Studying online</span> is now,{" "}
             <br /> much better!
@@ -27,7 +27,7 @@ export default function Home() {
             Get Started!
           </Button>
         </div>
-        <div className="self-end mx-auto hidden md:block">
+        <div className="self-end hidden mx-auto md:block">
           <Image
             src={"/images/landing.png"}
             alt="hero image"
@@ -36,14 +36,14 @@ export default function Home() {
           />
         </div>
       </div>
-      <div className="w-full h-screen flex flex-col gap-20 justify-center items-center ">
+      <div className="flex flex-col items-center justify-center w-full h-screen gap-20 ">
         <div className="">
           <h1 className="text-3xl font-semibold">
             <span className="text-green-heading">All-In-One</span>{" "}
             <span className="">Education Platform</span>
           </h1>
         </div>
-        <div className="flex justify-center w-full items-center gap-20">
+        <div className="flex items-center justify-center w-full gap-20">
           <Card className="w-1/4 h-72 border-green-heading">
             <CardHeader>
               <CardTitle className="text-xl">Performance Prediction</CardTitle>
@@ -112,8 +112,8 @@ export default function Home() {
           </Card>
         </div>
       </div>
-      <div className=" w-full h-screen flex gap-20 justify-between items-center">
-        <div className=" w-1/2 flex justify-center items-center mx-auto">
+      <div className="flex items-center justify-between w-full h-screen gap-20 ">
+        <div className="flex items-center justify-center w-1/2 mx-auto ">
           <Image
             src={"/images/assessment.png"}
             width={500}
@@ -121,8 +121,8 @@ export default function Home() {
             alt="assessment"
           />
         </div>
-        <div className="w-1/2  mx-auto">
-          <h1 className="font-semibold text-2xl">
+        <div className="w-1/2 mx-auto">
+          <h1 className="text-2xl font-semibold">
             Assessments,
             <br />
             Quizzes & Tests
@@ -133,9 +133,9 @@ export default function Home() {
           </p>
         </div>
       </div>
-      <div className=" w-full h-screen grid grid-cols-2 justify-center items-center">
-        <div className="w-1/2  mx-auto">
-          <h1 className="font-semibold text-2xl">
+      <div className="grid items-center justify-center w-full h-screen grid-cols-2 ">
+        <div className="w-1/2 mx-auto">
+          <h1 className="text-2xl font-semibold">
             One-on-One,
             <br />
             Discussions and tutoring
@@ -145,7 +145,7 @@ export default function Home() {
             with faculty who are available.
           </p>
         </div>
-        <div className=" w-1/2 flex justify-center items-center mx-auto">
+        <div className="flex items-center justify-center w-1/2 mx-auto ">
           <Image
             src={"/images/google-meet.png"}
             width={500}
@@ -154,8 +154,8 @@ export default function Home() {
           />
         </div>
       </div>
-      <div className="bg-gradient-to-t from-green-dark to-white w-full h-screen flex gap-20 justify-between items-center">
-        <div className=" w-1/2 flex justify-center items-center mx-auto">
+      <div className="flex items-center justify-between w-full h-screen gap-20 bg-gradient-to-t from-green-dark to-white">
+        <div className="flex items-center justify-center w-1/2 mx-auto ">
           <Image
             src={"/images/lady.png"}
             width={500}
@@ -163,8 +163,8 @@ export default function Home() {
             alt="assessment"
           />
         </div>
-        <div className="w-1/2  mx-auto">
-          <h1 className="font-semibold text-2xl">
+        <div className="w-1/2 mx-auto">
+          <h1 className="text-2xl font-semibold">
             Tools for
             <br />
             Teachers & Students

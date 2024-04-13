@@ -4,6 +4,8 @@ import { Inter, Poppins } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner"
+import Navbar from "./navbar2";
+import Footer from "./footer";
 
 const inter = Inter({ subsets: ["latin"] });
 const poppins = Poppins({
@@ -21,8 +23,14 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
+
       <html lang="en">
-        <body className={poppins.className}>{children}</body>
+
+        <body className={poppins.className}>
+          <Navbar />
+          {children}
+          <Footer />
+        </body>
         <Toaster />
       </html>
     </ClerkProvider>
