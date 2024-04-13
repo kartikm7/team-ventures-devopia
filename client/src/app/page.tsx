@@ -1,13 +1,16 @@
+"use client";
+
 import Image from "next/image";
 import { SignUp } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import Link from 'next/link'
+
 export default function Home() {
-  const navigate = useNavigate();
   return (
     <main className="flex justify-center items-center mt-10">
-      <Button onClick={() => navigate("/login")}>Go to Login</Button>
-      <SignUp />
+      <Link href="/login">
+        <Button>Login</Button>
+      </Link>
     </main>
   );
 }
