@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss"
-
+import { Poppins } from "next/font/google"
 const config = {
   darkMode: ["class"],
   content: [
@@ -84,7 +84,7 @@ const config = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       fontFamily: {
-        heading: ["Poppins", "sans-serif"],
+        text: ["Poppins", "sans-serif"],
       }
     },
   },

@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <main className="flex justify-center items-center mt-10">
       <Link href="/login">
-        <Button className="text-blue-heading">Login</Button>
+        <Button className="text-blue-background font-text">Login</Button>
       </Link>
     </main>
   );
