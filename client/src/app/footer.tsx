@@ -10,7 +10,7 @@ import Link from "next/link"
 export default function Footer() {
     return (
         <section className="w-full py-12 md:py-24 lg:py-32 bg-green-dark dark:bg-zinc-100">
-            <div className="container flex flex-col items-center px-4 text-center md:px-6">
+            <div className="container flex flex-col items-center gap-4 px-4 text-center md:px-6">
                 <h2 className="text-2xl font-bold tracking-tighter text-white sm:text-3xl md:text-4xl lg:text-5xl/none">
                     Stay Connected
                 </h2>
@@ -20,7 +20,7 @@ export default function Footer() {
                 <div className="w-full max-w-md my-4 space-y-2">
                     <form className="flex space-x-2">
                         <Input className="flex-1 max-w-lg bg-white text-zinc-900" placeholder="Enter your email" type="email" />
-                        <Button className="text-white border-white" type="submit" variant="outline">
+                        <Button className="text-white bg-black border-white" type="submit" variant="outline">
                             Subscribe
                         </Button>
                     </form>

@@ -1,135 +1,178 @@
 "use client"
-
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import React from 'react'
 import { useUser } from "@clerk/nextjs"
-import { useMemo } from 'react';
-
 import { Button } from "@/components/ui/button"
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from "react"
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 
-const formSchema = z.object({
-    fullName: z.string().min(2, {
-        message: "Username must be at least 2 characters.",
-    }),
-    grade: z.string().min(2, {
-        message: "Grade must be at least 2 characters.",
-    }),
-    email: z.string().email({
-        message: "Please enter a valid email address.",
-    }),
-    age: z.number().int() // Ensure age is an integer
-        .min(5, { message: "Please enter a valid age (minimum 5 year old)." }) // Minimum age of 1
-        .max(20, { message: "Please enter a valid age (maximum 19 years old)." }), // Maximum age of 19
-    school: z.string().min(2, {
-        message: "School must be at least 2 characters.",
-    }),
-    phone: z.string().min(10, {
-        message: "Phone number must be at least 10 characters.",
-    })
-});
+type FormValues = {
+    fullName: string,
+    grade: string,
+    email: string,
+    age: string,
+    phone: string,
+}
+
+type FormItemProps = {
+    label: string,
+    namer: string,
+    type: string,
+    value: string,
+    placeholder: string,
+    defaultValue?: string,
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+}
+
+type SelectItemProps = {
+    label: string,
+    defaultValue?: string,
+    values: string[],
+    placeholder: string,
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+}
+
+const FormItem1 = (props: FormItemProps) => {
+    return (
+        <>
+            <Input
+                id={props.namer}
+                name={props.namer}
+                type={props.type}
+                value={props.value}
+                onChange={props.onChange}
+                placeholder={props.placeholder}
+                defaultValue={props.defaultValue}
+                className='px-4 py-2 font-text focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-green-dark'
+            />
+        </>
+    )
+}
+
+const SelectItem1 = (props: SelectItemProps) => {
+    return (
+        <Select>
+            <SelectTrigger className="w-full">
+                <SelectValue className='' placeholder={props.placeholder} />
+            </SelectTrigger>
+            <SelectContent className=''>
+                <SelectGroup className=''>
+                    <SelectLabel className=''>{props.label}</SelectLabel>
+                    {
+                        props.values.map((value, index) => (
+                            <SelectItem key={index} value={value} onChange={props.onChange}>{value}</SelectItem>
+                        ))
+                    }
+                </SelectGroup>
+            </SelectContent>
+        </Select>
+    )
+}
 
 export function ProfileForm() {
-    let user = null;
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-    })
-    user = useUser().user;
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values)
-    }
-    useEffect(() => {
-        if (user) {
-            form.reset({
-                fullName: user.fullName ?? "",
-                grade: "",
-                email: user.primaryEmailAddress?.emailAddress ?? "",
-                age: 0,
-                school: "",
-            });
-            console.log("Updated")
-        }
-    }, [user]);
 
+    const [selected, setSelected] = useState<string>("");
+    const user = useUser()
+    const router = useRouter()
+
+    const [form, setForm] = useState<FormValues>({
+        fullName: "",
+        grade: "",
+        email: "",
+        age: "",
+        phone: ""
+    })
+
+    useEffect(() => {
+        console.log(user)
+        if (user.user) {
+            setForm({
+                fullName: user.user?.fullName || "",
+                grade: "",
+                email: user.user?.primaryEmailAddress?.emailAddress || "",
+                age: "",
+                phone: ""
+            })
+        }
+    }, []);
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        console.log(form);
+        router.push('/marksheet-upload');
+    }
 
     return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <p className="font-text w-full text-center font-bold text-lg">Fill in the Details</p>
-                <FormField
-                    control={form.control}
-                    name="fullName"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel className="text-md">Full Name</FormLabel>
-                            <FormControl>
-                                <Input className="py-3 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:outline-none focus-visible:border-1 focus-visible:border-green-dark mx-2 font-text rounded-3xl px-5 border-green-dark" placeholder="Enter your Full Name" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )} />
-                <FormField
-                    control={form.control}
-                    name="grade"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel className="text-md">Grade</FormLabel>
-                            <FormControl>
-                                <Input className="py-3 focus-visible:ring-0 focus-visible:outline-none focus-visible:border-1 focus-visible:border-green-dark mx-2 font-text rounded-3xl px-5 border-green-dark" placeholder="Enter your Grade" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )} />
-                <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel className="text-md">Email</FormLabel>
-                            <FormControl>
-                                <Input className="py-3 focus-visible:ring-0 focus-visible:outline-none focus-visible:border-1 focus-visible:border-green-dark mx-2 font-text rounded-3xl px-5 border-green-dark" placeholder="Enter your Email" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )} />
-                <FormField
-                    control={form.control}
-                    name="age"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel className="text-md">Age</FormLabel>
-                            <FormControl>
-                                <Input className="py-3 focus-visible:ring-0 focus-visible:outline-none focus-visible:border-1 focus-visible:border-green-dark mx-2 font-text rounded-3xl px-5 border-green-dark" placeholder="Enter your Age" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )} />
-                <FormField
-                    control={form.control}
-                    name="phone"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel className="text-md">Phone Number</FormLabel>
-                            <FormControl>
-                                <Input className="py-3 focus-visible:ring-0 focus-visible:outline-none focus-visible:border-1 focus-visible:border-green-dark mx-2 font-text rounded-3xl px-5 border-green-dark" placeholder="Enter your Age" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )} />
-                <Button className="px-8 py-4 rounded-3xl bg-green-dark font-text font-bold" type="submit">Submit</Button>
-            </form>
-        </Form >
+        <form className='flex flex-col gap-10'>
+            <p className="w-full text-2xl font-bold text-center">Fill in the Details</p>
+            <div className='flex flex-col gap-7'>
+                <div className='flex flex-col gap-2'>
+                    <label htmlFor="">Full Name: </label>
+                    <FormItem1
+                        label="Full Name"
+                        namer="fullName"
+                        type="text"
+                        value={form.fullName}
+                        placeholder='Enter your full name'
+                        defaultValue={user.user ? user.user.fullName : ""}
+                        onChange={(e) => setForm({ ...form, fullName: e.target.value })}
+                    />
+                </div>
+                <div className='flex flex-col gap-2'>
+                    <label htmlFor="">Grade / Standard: </label>
+                    <SelectItem1
+                        label="Grade"
+                        values={["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]}
+                        placeholder='Select your grade'
+                        onChange={(e) => setSelected(e.target.value)}
+                    />
+                </div>
+                <div className='flex flex-col gap-2'>
+                    <label htmlFor="">Email: </label>
+                    <FormItem1
+                        label="Email"
+                        namer="email"
+                        type="email"
+                        value={form.email}
+                        placeholder='Enter your email'
+                        defaultValue={user.user ? user.user.primaryEmailAddress?.emailAddress : ""}
+                        onChange={(e) => setForm({ ...form, email: e.target.value })}
+                    />
+                </div>
+                <div className='flex flex-col gap-2'>
+                    <label htmlFor="">Age: </label>
+                    <FormItem1
+                        label="Age"
+                        namer="age"
+                        type="number"
+                        value={form.age}
+                        placeholder='Enter your age'
+                        onChange={(e) => setForm({ ...form, age: e.target.value })}
+                    />
+                </div>
+                <div className='flex flex-col gap-2'>
+                    <label htmlFor="">Phone No. (+91)</label>
+                    <FormItem1
+                        label="Phone"
+                        namer="phone"
+                        type="tel"
+                        value={form.phone}
+                        placeholder='Enter your phone number'
+                        onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                    />
+                </div>
+            </div>
+            <Button className="px-8 py-4 font-bold rounded-3xl bg-green-dark font-text" type="submit" onClick={handleSubmit}>Submit</Button>
+        </form>
     )
 }
 
