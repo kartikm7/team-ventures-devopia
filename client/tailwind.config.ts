@@ -27,6 +27,9 @@ const config = {
           background: "#9DCCFF",
           heading: "#2F327D"
         },
+        text: {
+          grey: "#5B5B5B"
+        },
         gradient: {
           one: "linear-gradient(#131DB5 100%, #49BBBD 100%)",
         },
