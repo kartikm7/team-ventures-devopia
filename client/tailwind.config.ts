@@ -7,7 +7,7 @@ const config = {
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
-	],
+  ],
   prefix: "",
   theme: {
     container: {
@@ -19,6 +19,17 @@ const config = {
     },
     extend: {
       colors: {
+        green: {
+          dark: "#49BBBD",
+          heading: "#00CBB8"
+        },
+        blue: {
+          background: "#9DCCFF",
+          heading: "#2F327D"
+        },
+        gradient: {
+          one: "linear-gradient(#131DB5 100%, #49BBBD 100%)",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -72,6 +83,9 @@ const config = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      fontFamily: {
+        heading: ["Poppins", "sans-serif"],
+      }
     },
   },
   plugins: [require("tailwindcss-animate")],
