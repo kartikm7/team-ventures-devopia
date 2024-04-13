@@ -14,8 +14,9 @@ from langchain.chains import RetrievalQA
 
 warnings.filterwarnings("ignore")
 
+# load_dotenv('.env')
+# API_KEY = os.getenv("API_KEY")
 API_KEY = "AIzaSyBfMvikYUef6xxUi2wqOY6V88qbo0_8RP0"
-
 
 def load_and_split_pdfs(pdf_directory):
     page_contents = []
@@ -45,16 +46,17 @@ def pdf2vec(pdf_directory,embeddings_model):
 
 def create_qa_chain_model(gemini_pro_model, vector_index, question):
     template = """
-    Use the following pieces of context to make a question paper containing 20 questions along with the answer. If you don't know the answer, just say that you don't know, don't try to make up an answer. Keep the answer as concise as possible.
-    {context}
-    Helpful Answer: i want the response in one single string {{"questions":[<Questions with answers>]}}
+    Use the following pieces of context to answer the questions asked by the user. If you don't know the answer, just say that you don't know, don't try to make up an answer. Keep the answer as concise as possible. 
+    Context : {context}
+    Question: {question}
+    Helpful Answer: Provide the response in one single string.
     """
 
     QA_CHAIN_PROMPT = PromptTemplate.from_template(template)
     qa_chain = RetrievalQA.from_chain_type(
         gemini_pro_model,
         retriever=vector_index,
-        return_source_documents=True,
+        # return_source_documents=True,
         chain_type_kwargs={"prompt": QA_CHAIN_PROMPT}
     )
     result = qa_chain({"query": question})
@@ -68,9 +70,7 @@ if __name__ == "__main__":
     pdf_directory = os.getcwd()+"/data"
     vector_index = pdf2vec(pdf_directory,embeddings_model)
 
-
-    question = "Give me a list of most important questions"
+    question = "What are chemical equations in 500 words"
     x = create_qa_chain_model(gemini_model,vector_index,question)
 
     print(x['result'])
-
