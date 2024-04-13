@@ -3,7 +3,7 @@ import { SignUp } from '@clerk/nextjs'
 
 const Signup = () => {
     return (
-        <div className='flex items-center justify-center my-10'>
+        <div className='flex justify-center h-screen my-10'>
             <SignUp
                 path="/signup"
                 routing="path"
