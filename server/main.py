@@ -242,13 +242,13 @@ def recommend_playlists():
     grade = student_data.get("class")
 
     # Define a unanimous threshold for low performance in all subjects
-    threshold = 40  # Set the same threshold for all subjects
+    threshold = 100  # Set the same threshold for all subjects
 
     # Initialize a list to store recommended content
     recommended_content = []
 
     # YouTube API key
-    YOUTUBE_API_KEY = "AIzaSyCCZPVVL666YZHtjho1qy_izAqx-VsA8C4"
+    YOUTUBE_API_KEY = "AIzaSyAVSc9ZgLsqFZXjpdKPa-G-gYeh9Fh2l-s"
 
     # Iterate through the student's performance in each subject
     for subject, score in student_performance.items():
@@ -264,7 +264,6 @@ def recommend_playlists():
             youtube_api_url = f"https://www.googleapis.com/youtube/v3/search?q={search_query}&type=video,playlist&part=snippet&maxResults=5&key={YOUTUBE_API_KEY}"
             response = requests.get(youtube_api_url)
             data = response.json()
-
             # Extract video and playlist information from the response
             for item in data.get("items", []):
                 # Initialize a dictionary to store video or playlist details
@@ -285,6 +284,7 @@ def recommend_playlists():
                 # Add the content information to the list of recommended content
                 recommended_content.append(content_info)
 
+                print(recommended_content[:5])
     # Return the recommended content (content ID, title, and thumbnail URL) as a JSON response
     return jsonify({"recommended_content": recommended_content[:5]})
 

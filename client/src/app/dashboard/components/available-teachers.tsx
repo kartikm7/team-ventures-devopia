@@ -28,7 +28,7 @@ type CarouselItemProps = {
 
 const CarouselItem1 = ({ title, desc, button_text, profile_pic, name }: CarouselItemProps) => {
   return (
-    <CarouselItem c>
+    <CarouselItem>
       <Card className="">
         <CardHeader>
           <CardTitle>
@@ -62,7 +62,7 @@ export default function FreeTeachers() {
     <Carousel className="w-full">
       <CarouselContent>
         <CarouselItem className="basis-1/2">
-          <Card>
+          <Card className="size-52">
             <CardHeader>
               <CardTitle className="text-xl">
                 <div className="flex items-center gap-2">
@@ -88,18 +88,18 @@ export default function FreeTeachers() {
           </Card>
         </CarouselItem>
         <CarouselItem className="basis-1/2">
-          <Card>
+          <Card className="size-52">
             <CardHeader>
               <CardTitle className="text-xl">
                 <div className="flex items-center gap-2">
                   <div className="">
                     <Avatar>
                       <AvatarImage src="" />
-                      <AvatarFallback>M</AvatarFallback>
+                      <AvatarFallback>S</AvatarFallback>
                     </Avatar>
                   </div>
 
-                  <h1>Manish Potey</h1>
+                  <h1>Arjun Desai</h1>
                 </div>
               </CardTitle>
               <CardDescription>Mathematics Faculty</CardDescription>
