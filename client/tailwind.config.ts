@@ -31,7 +31,7 @@ const config = {
           grey: "#5B5B5B"
         },
         gradient: {
-          one: "linear-gradient(#131DB5 100%, #49BBBD 100%)",
+          one: "linear-gradient(90deg, rgba(19,29,181,1) 21%, rgba(73,187,189,1) 76%);",
         },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

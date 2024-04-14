@@ -3,18 +3,41 @@ import React, { useState } from 'react';
 import { Upload } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { FileText } from 'lucide-react';
+import { db, storage } from '../../../sdk/FirebaseSDK';
+import { useUser } from '@clerk/nextjs';
+import { useEffect } from 'react';
+import { doc, setDoc } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { useRouter } from 'next/navigation';
 interface MarksheetUploadProps {
     // Add any props you might need here
 }
 
 const AnswerUpload: React.FC<MarksheetUploadProps> = () => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const user = useUser();
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (!file) return;
         setSelectedFile(file);
+        console.log(file);
     };
+    const router = useRouter();
+    const handleSubmit = async () => {
+        const fileRef = ref(storage, `users/${user.user?.id}/answer/${selectedFile?.name}`);
+        if (!user.user) return;
+        uploadBytes(fileRef, selectedFile as Blob).then(async (snapshot) => {
+            console.log('Uploaded a blob or file!', snapshot);
+            const downloadURL = await getDownloadURL(fileRef);
+            console.log('File available at', downloadURL);
+            await setDoc(doc(db, 'users', user.user?.id), {
+                marksheets: [downloadURL]
+            }, { merge: true });
+        })
+
+        router.push('/correction');
+    }
 
     return (
         <div className='flex flex-row-reverse items-center justify-between max-w-6xl gap-10 mx-auto'>
@@ -46,7 +69,7 @@ const AnswerUpload: React.FC<MarksheetUploadProps> = () => {
                 {selectedFile && (
                     <p>Selected file: {selectedFile.name}</p>
                 )}
-                <button className='px-4 py-2 text-white rounded-md bg-green-dark' disabled={!selectedFile}>Submit</button>
+                <button className='px-4 py-2 text-white rounded-md bg-green-dark' disabled={!selectedFile} onClick={handleSubmit}>Submit</button>
             </div>
             <div className='flex flex-col gap-3'>
                 <p className='text-xl font-bold'>Steps to Follow</p>

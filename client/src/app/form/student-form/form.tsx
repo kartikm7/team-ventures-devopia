@@ -1,6 +1,5 @@
 "use client"
 import React from 'react'
-import { useUser } from "@clerk/nextjs"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useRouter } from 'next/navigation'
@@ -14,6 +13,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import { useUser } from '@clerk/nextjs'
+import { doc, setDoc } from 'firebase/firestore'
+import { db } from '../../../../sdk/FirebaseSDK'
 
 type FormValues = {
     fullName: string,
@@ -79,7 +81,6 @@ const SelectItem1 = (props: SelectItemProps) => {
 }
 
 export function ProfileForm() {
-
     const [selected, setSelected] = useState<string>("");
     const user = useUser()
     const router = useRouter()
@@ -105,8 +106,20 @@ export function ProfileForm() {
         }
     }, []);
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        if (user.user) {
+            await setDoc(doc(db, "users", user.user.id), {
+                fullName: form.fullName,
+                email: form.email,
+                uid: user.user.id,
+                marksheet: [],
+                profilePic: user.user.imageUrl,
+                grade: selected,
+                age: form.age,
+                phone: form.phone
+            }, { merge: true });
+        }
         console.log(form);
         router.push('/marksheet-upload');
     }
