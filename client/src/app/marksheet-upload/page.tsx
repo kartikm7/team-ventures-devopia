@@ -9,12 +9,17 @@ import { useEffect } from 'react';
 import { doc, setDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import { set } from 'react-hook-form';
 interface MarksheetUploadProps {
     // Add any props you might need here
 }
 
 const AnswerUpload: React.FC<MarksheetUploadProps> = () => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [responseData, setResponseData] = useState<any>(null);
+    const [url, setUrl] = useState<string>('');
     const user = useUser();
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,20 +30,41 @@ const AnswerUpload: React.FC<MarksheetUploadProps> = () => {
     };
     const router = useRouter();
     const handleSubmit = async () => {
+        setIsLoading(true);
         const fileRef = ref(storage, `users/${user.user?.id}/answer/${selectedFile?.name}`);
         if (!user.user) return;
-        uploadBytes(fileRef, selectedFile as Blob).then(async (snapshot) => {
+
+        try {
+            const snapshot = await uploadBytes(fileRef, selectedFile as Blob);
             console.log('Uploaded a blob or file!', snapshot);
             const downloadURL = await getDownloadURL(fileRef);
+            setUrl(downloadURL);
             console.log('File available at', downloadURL);
+
             await setDoc(doc(db, 'users', user.user?.id), {
                 marksheets: [downloadURL]
             }, { merge: true });
-        })
 
-        router.push('/correction');
-    }
+            const response = await axios.post('http://127.0.0.1:5000/marksheet', {
+                image_url: downloadURL,
+            });
 
+            console.log(response.data);
+            setResponseData(response.data);
+            setIsLoading(false);
+
+            await setDoc(doc(db, 'users', user.user?.id), {
+                marksheets: [url],
+                predictions: response.data // Use response.data directly here
+            }, { merge: true });
+
+            console.log("Response is: ", response.data);
+        } catch (error) {
+            console.error('Error sending POST request:', error);
+            setIsLoading(false);
+        }
+    };
+    
     return (
         <div className='flex flex-row-reverse items-center justify-between max-w-6xl gap-10 mx-auto'>
             <div className='flex flex-col items-center justify-center gap-10 my-10'>
@@ -103,6 +129,9 @@ const AnswerUpload: React.FC<MarksheetUploadProps> = () => {
                     </li>
                 </ol>
             </div>
+            {isLoading && <div className="absolute inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+                <div className="w-32 h-32 ease-linear border-8 border-t-8 border-gray-200 rounded-full loader"></div>
+            </div>}
         </div>
     );
 };
