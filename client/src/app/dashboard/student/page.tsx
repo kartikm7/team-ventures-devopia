@@ -12,9 +12,6 @@ import CourseCarousel from "../components/courses-carousel";
 import FreeTeachers from "../components/available-teachers";
 
 export default function Dashboard() {
-  const subjects = ["Math", "Science", "History", "English"];
-  const marks = [80, 70, 85, 75];
-
   return (
     <div className="flex flex-col w-full h-screen gap-10 ">
       <div className="grid items-center justify-center grid-cols-2 max-h-1/2">
@@ -36,8 +33,8 @@ export default function Dashboard() {
           </Card>
         </div>
       </div>
-      <div className="grid items-center justify-center grid-cols-2 max-h-1/2">
-        <div className="flex flex-col gap-3 mx-auto">
+      <div className="flex  items-center justify-center max-1/2">
+        <div className="flex flex-col gap-3 h-full justify-center w-1/2 mx-auto">
           <h1 className="text-3xl font-semibold">Courses for you</h1>
           <CourseCarousel />
         </div>
@@ -47,6 +44,9 @@ export default function Dashboard() {
         </div>
       </div>
     </div>
+    // < div className="w-full h-screen">
+    // <CourseCarousel />
 
+    // </div>
   );
 }
