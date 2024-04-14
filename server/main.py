@@ -245,6 +245,10 @@ def recommend_playlists():
                     content_id = item['id']['videoId']
                 elif item['id']['kind'] == 'youtube#playlist':
                     content_id = item['id']['playlistId']
+
+                # Add title and thumbnail URL to the dictionary
+                content_id['title'] = item['snippet']['title']
+                content_id['thumbnail_url'] = item['snippet']['thumbnails']['default']['url']
                 
                 # Add the content ID to the list of recommended content
                 if content_id:
