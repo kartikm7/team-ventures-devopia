@@ -10,6 +10,7 @@ import { doc, setDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import Link from 'next/link';
 import { set } from 'react-hook-form';
 interface MarksheetUploadProps {
     // Add any props you might need here
@@ -21,6 +22,7 @@ const AnswerUpload: React.FC<MarksheetUploadProps> = () => {
     const [responseData, setResponseData] = useState<any>(null);
     const [url, setUrl] = useState<string>('');
     const user = useUser();
+    const router = useRouter();
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -28,7 +30,6 @@ const AnswerUpload: React.FC<MarksheetUploadProps> = () => {
         setSelectedFile(file);
         console.log(file);
     };
-    const router = useRouter();
     const handleSubmit = async () => {
         setIsLoading(true);
         const fileRef = ref(storage, `users/${user.user?.id}/answer/${selectedFile?.name}`);
@@ -59,13 +60,13 @@ const AnswerUpload: React.FC<MarksheetUploadProps> = () => {
             }, { merge: true });
 
             console.log("Response is: ", response.data);
-            router.push('/dashboard/student');  
+            router.push('/dashboard/student');
         } catch (error) {
             console.error('Error sending POST request:', error);
             setIsLoading(false);
         }
     };
-    
+
     return (
         <div className='flex flex-row-reverse items-center justify-between max-w-6xl gap-10 mx-auto'>
             <div className='flex flex-col items-center justify-center gap-10 my-10'>
@@ -96,7 +97,10 @@ const AnswerUpload: React.FC<MarksheetUploadProps> = () => {
                 {selectedFile && (
                     <p>Selected file: {selectedFile.name}</p>
                 )}
-                <button className='px-4 py-2 text-white rounded-md bg-green-dark' disabled={!selectedFile} onClick={handleSubmit}>Submit</button>
+                <div className='flex gap-10'>
+                    <button className='px-4 py-2 text-white rounded-md bg-green-dark cursor-pointer' disabled={!selectedFile} onClick={handleSubmit}>Submit</button>
+                    <Link href='/answer-upload'><button className='px-4 py-2 text-white rounded-md bg-green-dark cursor-pointer' disabled={!selectedFile} >Move to Answer Upload</button></Link>
+                </div>
             </div>
             <div className='flex flex-col gap-3'>
                 <p className='text-xl font-bold'>Steps to Follow</p>

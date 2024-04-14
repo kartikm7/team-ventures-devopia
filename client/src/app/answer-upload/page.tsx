@@ -10,6 +10,7 @@ import axios from 'axios';
 import { useUser } from '@clerk/nextjs';
 import { set } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 interface AnswerUploadProps {
     // Add any props you might need here
 }
@@ -29,11 +30,12 @@ const AnswerUpload: React.FC<AnswerUploadProps> = () => {
     const handleSubmit = async () => {
         if (!selectedFile || !user.user?.id) return;
         setLoading(true);
+        if (!user.user) return;
         try {
             const storageRef = ref(storage, `${user.user.id}/answers/${selectedFile.name}`);
             await uploadBytes(storageRef, selectedFile);
             const downloadURL = await getDownloadURL(storageRef);
-
+            console.log("Download URL: ", downloadURL);
             const response = await axios.post('http://127.0.0.1:5000/score_student', {
                 image_path: downloadURL,
             })
@@ -81,7 +83,10 @@ const AnswerUpload: React.FC<AnswerUploadProps> = () => {
                 {selectedFile && (
                     <p>Selected file: {selectedFile.name}</p>
                 )}
-                <button className='px-4 py-2 text-white rounded-md bg-green-dark' disabled={!selectedFile} onClick={handleSubmit}>Submit</button>
+                <div className='flex gap-10'>
+                    <button className='px-4 py-2 text-white rounded-md bg-green-dark' disabled={!selectedFile} onClick={handleSubmit}>Submit</button>
+                    <button className='px-4 py-2 text-white rounded-md bg-green-dark' disabled={!selectedFile} onClick={() => router.push("/marksheet-upload")}>Move to Marksheet Upload</button>
+                </div>
             </div>
             <div className='flex flex-col gap-3'>
                 <p className='text-xl font-bold'>Steps to Follow</p>
