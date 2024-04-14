@@ -136,7 +136,7 @@ def pdf2vec(pdf_directory, embeddings_model):
 
 def create_qa_chain_model(gemini_pro_model, vector_index, question):
     template = """
-    Use the following pieces of context to answer the questions asked by the user. 
+    Use the following pieces of context to answer the questions asked by the user in detail. 
     Context : {context}
     Question: {question}
     Helpful Answer: Provide the response in one single string.
@@ -156,9 +156,9 @@ def create_qa_chain_model(gemini_pro_model, vector_index, question):
 
 def get_gemini_response(image):
     prompt = """
-    GIVE ME THE TWO THINGS IN THIS IMAGE:-
+    Read the Image Carefully and GIVE ME THE TWO THINGS IN THIS IMAGE:-
     - Question
-    - Answer
+    - Answer - (In exact words)
 
     STRICTLY RETURN IN THIS FORMAT {{"output":[<questions with answers>]}}
     """

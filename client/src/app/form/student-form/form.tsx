@@ -4,18 +4,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from "react"
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
 import { useUser } from '@clerk/nextjs'
 import { doc, setDoc } from 'firebase/firestore'
 import { db } from '../../../../sdk/FirebaseSDK'
+import { Form } from 'react-hook-form'
 
 type FormValues = {
     fullName: string,
@@ -32,14 +24,6 @@ type FormItemProps = {
     value: string,
     placeholder: string,
     defaultValue?: string,
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
-}
-
-type SelectItemProps = {
-    label: string,
-    defaultValue?: string,
-    values: string[],
-    placeholder: string,
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
 }
 
@@ -60,25 +44,6 @@ const FormItem1 = (props: FormItemProps) => {
     )
 }
 
-const SelectItem1 = (props: SelectItemProps) => {
-    return (
-        <Select>
-            <SelectTrigger className="w-full">
-                <SelectValue className='' placeholder={props.placeholder} />
-            </SelectTrigger>
-            <SelectContent className=''>
-                <SelectGroup className=''>
-                    <SelectLabel className=''>{props.label}</SelectLabel>
-                    {
-                        props.values.map((value, index) => (
-                            <SelectItem key={index} value={value} onChange={props.onChange}>{value}</SelectItem>
-                        ))
-                    }
-                </SelectGroup>
-            </SelectContent>
-        </Select>
-    )
-}
 
 export function ProfileForm() {
     const [selected, setSelected] = useState<string>("");
@@ -142,11 +107,13 @@ export function ProfileForm() {
                 </div>
                 <div className='flex flex-col gap-2'>
                     <label htmlFor="">Grade / Standard: </label>
-                    <SelectItem1
+                    <FormItem1
                         label="Grade"
-                        values={["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]}
-                        placeholder='Select your grade'
-                        onChange={(e) => setSelected(e.target.value)}
+                        namer="grade"
+                        type="text"
+                        value={form.grade}
+                        placeholder='Enter your grade'
+                        onChange={(e) => setForm({ ...form, grade: e.target.value })}
                     />
                 </div>
                 <div className='flex flex-col gap-2'>

@@ -5,6 +5,10 @@ import { useState } from 'react'
 import { useUser } from '@clerk/nextjs'
 import { Button } from '@/components/ui/button';
 import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../../../sdk/FirebaseSDK';
+import { set } from 'react-hook-form';
 
 const sampleData = [
     {
@@ -111,7 +115,7 @@ const BlockComponent = (props: BlockProps) => {
             <p className='m-0 text-xl font-bold'>{props.title}</p>
             {props.onChange ? (
                 <Input
-                    value={props.content.toString()}
+                    value={props.content}
                     onChange={handleChange}
                     className='w-20 px-2 py-1 m-0 border border-gray-300 rounded'
                 />
@@ -125,13 +129,30 @@ const BlockComponent = (props: BlockProps) => {
 const Corrections = () => {
     const user = useUser();
     const [count, setCount] = useState<number>(0);
-    const [score, setScore] = useState<string>(sampleData[0].score);
     const [scoreHistory, setScoreHistory] = useState<string[]>([]);
+    const router = useRouter();
+    const [answerData, setAnswerData] = useState<any>(null);
 
     useEffect(() => {
         console.log('User:', user.user);
         console.log("Scores:", scoreHistory);
+        const getUserData = async () => {
+            if (user.user) {
+                const userDocRef = doc(db, 'users', user.user?.id)
+                const docSnap = await getDoc(userDocRef);
+                if (docSnap.exists()) {
+                    const userData = docSnap.data().answer_predictions[0];
+                    setAnswerData(userData);
+                    console.log("User Data:", userData);
+                }
+            }
+        }
+        if (user.user) {
+            getUserData();
+        }
     }, [scoreHistory]);
+
+    const [score, setScore] = useState<string>(answerData?.semantic_score);
 
     const handleAccept = () => {
         const newCount = count + 1;
@@ -159,12 +180,12 @@ const Corrections = () => {
         <div className='flex flex-col justify-center w-full max-w-6xl m-4'>
             <div className='flex flex-col gap-5'>
                 <h1 className='text-xl font-bold'>Final Result for {user.user && user.user.fullName}</h1>
-                <BlockComponent title='Question: ' content={sampleData[count].question} />
-                <BlockComponent title='Answer by AI: ' content={sampleData[count].answerByAI} />
-                <BlockComponent title='Answer by User: ' content={sampleData[count].answerByUser} />
+                <BlockComponent title='Question: ' content={answerData?.question} />
+                <BlockComponent title='Answer by AI: ' content={answerData?.ai_generated_answer} />
+                <BlockComponent title='Answer by User: ' content={answerData?.student_answer} />
                 <BlockComponent
                     title='Score: '
-                    content={score}
+                    content={parseInt(Math.round(parseFloat(answerData?.semantic_score) * 100) / 10)} // Convert string to number and round to 2 decimal places
                     onChange={handleScoreChange}
                 />
 

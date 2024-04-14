@@ -59,6 +59,7 @@ const AnswerUpload: React.FC<MarksheetUploadProps> = () => {
             }, { merge: true });
 
             console.log("Response is: ", response.data);
+            router.push('/dashboard/student');  
         } catch (error) {
             console.error('Error sending POST request:', error);
             setIsLoading(false);
