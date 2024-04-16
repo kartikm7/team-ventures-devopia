@@ -1,0 +1,6 @@
+{
+    "question": "What are chemical equations in 250 words",
+    "ai_generated_answer": "Chemical equations are symbolic representations of chemical reactions. They show the chemical formulas of the reactants and products of a reaction, as well as the stoichiometric coefficients that balance the equation. The coefficients in a balanced chemical equation represent the relative number of moles of each reactant and product involved in the reaction. Chemical equations are used to represent a variety of chemical reactions, including combination, decomposition, single displacement, double displacement, and combustion reactions. They can also be used to represent reactions that occur in aqueous solutions, such as acid-base reactions and precipitation reactions.",
+    "student_answer": " Chemical equations are symbolic representations of chemical reactions. They use chemical formulas to show the reactants and products of a reaction, as well as the stoichiometric coefficients that balance the equation. Chemical equations must be balanced in order to satisfy the law of conservation of mass, which states that mass can neither be created nor destroyed in a chemical reaction.",
+    "semantic_score": 0.9030539393424988
+}
